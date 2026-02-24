@@ -28,4 +28,6 @@ sampled = pd.concat([
 
 sampled = sampled.sample(frac=1, random_state=42).reset_index(drop=True)
 
-sampled.to_csv('data/idioms_sentences_random_stratified.csv', 
+sampled.to_csv('data/idioms_sentences_random_stratified.csv', index=False, columns=['sentence', 'label'])
+
+print("Done! Saved as data/idioms_sentences_random_stratified.csv")
