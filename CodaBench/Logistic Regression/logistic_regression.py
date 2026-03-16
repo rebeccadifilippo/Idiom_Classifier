@@ -5,7 +5,7 @@ from sklearn.pipeline import Pipeline
 
 def main():
     train_df = pd.read_csv('train.csv')
-    test_df = pd.read_csv('test.csv')
+    test_df = pd.read_csv('test_input.csv')
 
     X_train = train_df['sentence']
     y_train = train_df['label']
