@@ -220,4 +220,4 @@ __marimo__/
 *.synctex.gz
 *.synctex(busy)
 
-.DS_Store
+*.DS_Store

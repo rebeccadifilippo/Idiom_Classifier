@@ -103,7 +103,7 @@ The dataset utilized for this project is the Potential Idiomatic Expression (PIE
 \subsection{Dataset Properties and Labels}
 The task is defined as a single-label classification problem where each text segment is mapped to one of ten primary literary device or idiomatic categories. The ten classes include: Euphemism, Hyperbole, Irony, Literal, Metaphor, Oxymoron, Paradox, Parallelism, Personification, and Simile. 
 
-A critical characteristic of this dataset is the significant class imbalance. As shown in Table \ref{tab:label_dist}, the distribution is heavily skewed toward Metaphors, while some categories, such as Irony and Oxymoron, represent less than 1\% of the total data points. This distribution presents a notable challenge for model training, as the "long-tail" labels have very low frequency.
+A critical characteristic of this dataset is the significant class imbalance. As shown in Table \ref{tab:label_dist}, the distribution is heavily skewed toward Metaphors, while some categories, such as Irony and Oxymoron, represent less than 1\% of the total data points. This distribution presents a notable challenge for model training, as the minority labels have very low frequency.
 
 \begin{table}[h]
   \centering
@@ -168,10 +168,34 @@ Due to the extreme class imbalance, where metaphors represent over 72\% of the d
 
 Describe your model and implementation here. Refer to item 4. This may take around a page.
 TIM/LEO
-\section{Results and Evaluation}
+\section{Results}
 
-What are your results? What did you implement and what did your classmates implement? What are your baselines? Refer to items 5 and 6. This may take around 0.5-1 pages.
-BECCA
+What are your results?
+TIM/LEO
+
+\section{Evaluation}
+
+\subsection{Evaluation Strategy}
+Our evaluation strategy is designed to assess the model's ability to generalize across a highly imbalanced multi-class dataset. We utilize a stratified sampling approach for our data splits to ensure that the minority classes, such as Irony and Oxymoron, are represented in the validation and test sets in proportions consistent with the overall corpus. The primary goal is to outperform a simple majority-vote baseline, which would achieve high accuracy by simply predicting "Metaphor" for every instance.
+
+\subsection{Train, Validation, and Test Splits}
+The dataset, consisting of 20,174 samples, was divided into training, validation, and test sets using an 80/10/10 split. The sizes of these splits are as follows:
+\begin{itemize}
+\item \textbf{Training Set:} 16,139 samples (80\%) used for model parameter optimization and feature learning.
+\item \textbf{Validation Set:} 2,017 samples (10\%) used for hyperparameter tuning and preventing overfitting.
+\item \textbf{Test Set:} 2,018 samples (10\%) held out for the final evaluation of model performance.
+\end{itemize}
+The label distribution remains consistent across these splits, with Metaphors accounting for roughly 72.7% and the minority classes (Irony, Oxymoron, Hyperbole) collectively making up less than 1%.
+
+\subsection{Evaluation Metrics}
+Due to the extreme class imbalance identified during our initial analysis, accuracy alone is an insufficient metric for this task. Instead, we prioritize the following metrics:
+\begin{itemize}
+\item \textbf{Macro-Averaged F1-Score:} This is our primary metric, as it treats all ten classes equally, regardless of their frequency. This ensures that the model is penalized heavily if it fails to correctly identify the minority literary devices like Paradox or Irony.
+\item \textbf{Weighted F1-Score:} We use this to understand the model’s overall performance while accounting for the high prevalence of metaphors in real-world English text.
+\item \textbf{Precision and Recall per Class:} We generate a classification report to examine specific errors, such as the model’s ability to distinguish between metaphors and similes or metaphors and literal statements.
+\item \textbf{Confusion Matrix:} This qualitative tool is used to visualize which classes are most frequently confused, providing insight into the semantic overlap between similar figurative devices.
+\end{itemize}
+
 \section{Comparison to Others}
 
 What are your results? What did you implement and what did your classmates implement? What are your baselines? Refer to items 5 and 6. This may take around 0.5-1 pages.
@@ -179,7 +203,8 @@ CLAIRE
 \section{Error Analysis}
 
 What kind of errors are your models making? This doesn't have to be super complicated. Confusion matrices are great. Qualitative observations are also great. This means looking at many cases where your model is wrong (wrong class or high error) and looking for patterns yourself. What about the text might be giving it difficulty? Qualitative analysis is underappreciated and can often give you great insight into issues with your model. Examples are useful here. Refer to item 7. This may be around a half page.
-TIM
+TIM/LEO
+
 \section*{Conclusions}
 
 Summarize your work briefly. Reflect on your implementation and areas for improvement. What do you suggest people work on next (mentioned also in item 7)? This should likely be less than 0.25 pages.
