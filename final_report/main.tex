@@ -27,7 +27,7 @@
 
 
 \author{Rebecca Di Filippo, Leo Vugert, Timothy Pokani, Claire Nielsen \\
-  \texttt{\{difilir,macid2,macid3,macid4\}@mcmaster.ca} }
+  \texttt{\{difilir,vugertl,pokanait,nielsc2\}@mcmaster.ca} }
 
 %\author{
 %  \textbf{First Author\textsuperscript{1}},
@@ -74,12 +74,27 @@
 
 \section{Introduction}
 
-Here, write a brief introduction to the problem you are solving. This can be adapted from your problem description and motivation from the original proposal. This should be around 0.25-0.5 pages.
-CLAIRE
+For this project, the team has created software that identifies and classifies idiomatic expressions and literary devices in English text. Specifically, this task
+focuses on detecting and labelling the type of figurative language present in short text segments, including: metaphors, similes, personification, as well as a few others. \\
+
+Understanding idiomatic and figurative language is a fundamental challenge in natural language processing because the intended meaning often cannot be
+derived directly from the literal meanings of the individual words. While humans can usually recognize these expressions using context and world knowledge,
+computational models struggle due to ambiguity, cultural conventions, and the subtle differences between similar devices (for example, discerning a metaphor vs. an idiom).\\
+
+This task is significant because idiomatic language appears frequently in real world applications of natural language processing such as social media analysis, educational tools, and conversational agents. Misinterpreting these expressions can lead to incorrect or misleading system responses. Unlike standard sentiment analysis, which focuses primarily on emotional polarity, this task requires the software to perform semantic disambiguation and contextual reasoning. This goes beyond surface-level text classification, and requires the model to navigate linguistic ambiguity where the intended meaning cannot be derived directly from the literal meanings of individual words.\\
+
 \section{Related Work}
 
-Here, talk about the related work you encountered for your approach. REFERENCE S (at least 5). Refer to item 1. No one has done exactly your task? Write about the most similar thing you can find. This should be around 0.25-0.5 pages.
-CLAIRE
+The team found their dataset attached to a study done in 2022, which performed the same task. This study was incredibly helpful as a benchmark, as it tested for the same categories as this task. This was the first indication that BERT would perform quite well, as in this study it outperformed both Multinomial Naive-Bayes and Support Vector Machine models \citet{adewumi2022potentialidiomaticexpressionpieenglish}. The BERT resultant F1-Score was 0.948, which this team would later surpass. \\
+
+A study performed in 2009 examined the results of a combined classifier that uses both supervised and unsupervised models to examine literal vs. non-literal use of idiomatic expressions. This study found that the combined classifier was more accurate than the unsupervised classifier alone and the majority baseline; the combined classifier resulted in an error reduction of over 35\% \cite{li-sporleder-2009-classifier}. \\
+
+Research by \citet{11251805} highlighted the success of the BERT model when applied to a text to analyse literary devices. Models such as GloVe and Word2Vec treat words as separate entities, while BERT takes in the surrounding context, leading to much better performance analysing literary devices. This paper reported an F1-Score of 0.85 resulting from applying BERT to detect metaphors on a corpus build from Project Gutenberg and other public literary anthologies. \\
+
+A similar paper published in 2024 tested the BERT model on text classification, sentiment analysis, and and question answering. This paper found that BERT yielded an F1-Score on text classification of 0.915, a score on sentiment analysis of 0.885, and a score on question answering of 0.865. These results were all higher than their counterparts performed by recurrent neural networks (RNNs), supporting the conclusion that the BERT model would outperform RNN methods, at the cost of much longer training time and computational load \cite{10918499}. \\
+
+A study was done by \citet{wu2024researchapplicationdeeplearningbased} that compared BERT and DistilBERT while performing sentiment analysis. It explains that by updating parameter weights used on the BERT model, DistilBERT can perform better on sentence classification when using a full set of parameters. \\
+
 \section{Dataset}
 
 You should write about your dataset here, following the guidelines regarding item 2. This section may be 0.5-1 pages. Depending on your specific dataset, you may want to include subsections for the preprocessing, annotation, etc.
@@ -113,7 +128,7 @@ BECCA
 
 Write in this section a few sentences describing the contributions of each team member. What did each member work on?
 
-\section*{References}
+\bibliography{final_report/custom}
 
-put references here
+
 \end{document}
