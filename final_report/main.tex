@@ -198,8 +198,45 @@ Due to the extreme class imbalance identified during our initial analysis, accur
 
 \section{Comparison to Others}
 
-What are your results? What did you implement and what did your classmates implement? What are your baselines? Refer to items 5 and 6. This may take around 0.5-1 pages.
-CLAIRE
+\section{Comparison to Others}
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{lll}
+    \hline
+    \textbf{Model} & \textbf{Accuracy} & \textbf{F1 Score} \\
+    \hline
+    roberta (team)    &   0.97   &   0.88   \\
+    bert (team)   &   0.95   &   0.63   \\
+    modern-bert (team)      &   0.96   &   0.94  \\
+    Majority Vote (team)   &   0.73   &   0.08   \\
+    \hline
+    modern-bert (AK) & 0.97 & 0.98 \\
+    roberta-base (AK) & 0.97 & 0.94 \\
+    Majority Vote (AK) & 0.73 & 0.08 \\
+    \hline
+    roberta-base (KO) & 0.90 & 0.35 \\
+    bert (KO) & 0.86 & 0.33 \\
+    BoW Classifier (KO) & 0.85 & 0.43 \\
+    \hline
+  \end{tabular}
+  \caption{\label{tuning_results_compare}
+    Comparison of Group 10's Results with Peers' Results. \newline
+  }
+\end{table} 
+
+The best-performing model produced by peers was a fine-tuned modernBERT-base model by Arjun Karthik. This model resulted in an accuracy of 0.98 and Macro F1 of 0.97. This is an incredible result, and is the best-performing result on the team's Codabench page. The modernBert-base model run by the team produced was close behind, resulting in an accuracy of 0.96 and F1 score of 0.94.\\ 
+
+Within Arjun's results, we also saw a fine-tuned roberta-base model performed quite well, producing an accuracy of 0.97 and F1 of 0.94. This model once again outscored the team's roberta-base, which produced an accuracy of 0.97, but an F1 score of 0.88. \\
+
+Arjun's Majority Vote Baseline model saw an accuracy of 0.73, and an F1 score of 0.08. This makes sense, since the majority class in the dataset is Metaphor, making up 72.7\% of the total data points. Since the majority vote makes up so much of the class, it makes sense that accuracy would be so high, but precision and therefore F1 score would be so low. \\
+
+Both of Arjun's zero-shot models performed in the same ballpark: the facebook/bart-large-mnli produced an accuracy of 0.41 and F1 of 0.09; the MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli produced an accuracy of 0.42 and F1 score of 0.08. Since zero-shot models classify using no training data, it makes sense that these models perform far worse than trained models. \\
+
+Another peer that worked with our classification task was Kenneth Ong. Kenneth's best-performing model produced an accuracy of 0.90, however this was accompanied with an F1 score of 0.35, markedly lower than other results. His Bag-of-Words classifier actually produced a higher F1 score of 0.43, along with a lower accuracy of 0.85. Overall, these results were outscored by our team. \\
+
+Kenneth ran a bert-base-uncased model that produced an accuracy of 0.86 and F1 score of 0.33. This was outscored in both categories by our team's bert-base-uncased model, which produced an accuracy of 0.95 and F1 score of 0.63. \\
+
 \section{Error Analysis}
 
 What kind of errors are your models making? This doesn't have to be super complicated. Confusion matrices are great. Qualitative observations are also great. This means looking at many cases where your model is wrong (wrong class or high error) and looking for patterns yourself. What about the text might be giving it difficulty? Qualitative analysis is underappreciated and can often give you great insight into issues with your model. Examples are useful here. Refer to item 7. This may be around a half page.
