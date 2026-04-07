@@ -97,16 +97,77 @@ A study was done by \citet{wu2024researchapplicationdeeplearningbased} that comp
 
 \section{Dataset}
 
-You should write about your dataset here, following the guidelines regarding item 2. This section may be 0.5-1 pages. Depending on your specific dataset, you may want to include subsections for the preprocessing, annotation, etc.
-TIM
+\subsection{Source and Collection}
+The dataset utilized for this project is the Potential Idiomatic Expression (PIE)-English Corpus, which is a labeled dataset designed for the classification of idiomatic expressions and literary devices. The data is publicly available via a GitHub repository and is derived primarily from the British National Corpus (BNC), which accounts for 96.9\% of the samples, and UK Web Pages (UKWaC), which accounts for the remaining 3.1\%. The original corpus was extracted by near-native English speakers and labeled by independent annotators to ensure accuracy. 
+
+\subsection{Dataset Properties and Labels}
+The task is defined as a single-label classification problem where each text segment is mapped to one of ten primary literary device or idiomatic categories. The ten classes include: Euphemism, Hyperbole, Irony, Literal, Metaphor, Oxymoron, Paradox, Parallelism, Personification, and Simile. 
+
+A critical characteristic of this dataset is the significant class imbalance. As shown in Table \ref{tab:label_dist}, the distribution is heavily skewed toward Metaphors, while some categories, such as Irony and Oxymoron, represent less than 1\% of the total data points. This distribution presents a notable challenge for model training, as the "long-tail" labels have very low frequency.
+
+\begin{table}[h]
+  \centering
+  \caption{Label Distribution in the PIE-English Corpus}
+  \label{tab:label_dist}
+  \resizebox{\columnwidth}{!}{% 
+  \begin{tabular}{|l|r|l|r|}
+  \hline
+  \textbf{Label} & \textbf{Frequency} & \textbf{Label} & \textbf{Frequency} \\ \hline
+  Metaphor & 72.7\% & Oxymoron & 0.24\% \\ \hline
+  Euphemism & 11.82\% & Paradox & 0.56\% \\ \hline
+  Simile & 6.11\% & Hyperbole & 0.24\% \\ \hline
+  Literal & 5.65\% & Parallelism & 0.32\% \\ \hline
+  Personification & 2.22\% & Irony & 0.16\% \\ \hline
+  \end{tabular}%
+  }
+  \end{table}
+\subsection{Preprocessing}
+The original source data was provided in a token-per-row CSV format. To make the data suitable for sentence-level classification and manual annotation, we implemented a Python script to perform the following preprocessing steps:
+\begin{itemize}
+    \item \textbf{Sentence Reconstruction:} Tokens were joined to reconstruct full sentences from the tokenized rows.
+    \item \textbf{Normalization:} All reconstructed sentences were converted to lowercase.
+    \item \textbf{Random Sampling:} From the total 20,174 samples, we randomly sampled 1,200 data points to create a balanced mixture for our team's manual annotation phase.
+\end{itemize}
+
+\subsection{Annotation Procedure and Reliability}
+Our team followed a structured annotation protocol using a shared spreadsheet interface. Each of the four team members independently annotated 300 unique data points, resulting in 1,200 total primary annotations. To measure Inter-Annotator Agreement (IAA), each member also re-annotated a subset of 45 data points originally labeled by a teammate.
+
+The consistency of our annotations was evaluated using Cohen's Kappa for pairwise comparisons and Krippendorff's Alpha for overall group reliability. Our pairwise Cohen's Kappa scores ranged from 0.6293 to 0.8990, representing substantial to great agreement. The final Krippendorff's Alpha was 0.8790, which actually exceeded some individual pairwise scores, suggesting our group was highly aligned with the original corpus's "Gold Standard" labels
+
+\subsection{Data Observations}
+During the annotation process, we identified several interesting linguistic nuances. Some sentences presented "edge cases" where literal and metaphorical meanings overlapped, such as \textit{"the worry at the back of her mind,"} which is metaphorical, appearing alongside the literal phrase \textit{"she sat down beside her patient"}. Furthermore, because the corpus is British-centric, we encountered regional idioms such as \textit{"not by a long chalk,"} which is the UK equivalent of the North American \textit{"not by a long shot"}. These cultural variations and internal sentence ambiguities highlight the difficulty of the classification task for automated models.
+
+
 \section{Features}
 
-Describe any features you used for your model, or how your data was input to your model. Are you doing feature engineering or feature selection? Are you learning embeddings? Is it all part of one neural network? Refer to item 3. This may range from 0.25 pages to 0.5 pages.
-TIM
+\subsection{Model Inputs and Representation}
+The primary input for our models consists of reconstructed English sentences derived from the token-per-row CSV format of the PIE-English Corpus. During the preprocessing phase, these tokens are joined to form complete grammatical units, ensuring the models have access to the full sentential context necessary for disambiguating figurative language. To reduce the complexity of the input space and handle vocabulary sparsity, all text is normalized to lowercase before being fed into the embedding layers.
+
+\subsection{Representation Learning and Embeddings}
+Our team utilizes a combination of learned and
+ pretrained embeddings. For our transformer-based models, 
+ we perform representation learning where the model learns 
+ task-specific embeddings through fine-tuning.This approach
+  is vital because the meaning of an idiom often cannot 
+  be derived from individual word embeddings alone. 
+  By fine-tuning, the model develops a representation 
+  that prioritizes the semantic relationship between words
+   in a figurative context.
+
+\subsection{Feature Engineering}
+In addition to automated representation learning, we incorporate manual feature engineering to assist the models in identifying structural cues for low-frequency classes. Key features include:
+\begin{itemize}
+    \item \textbf{Part-of-Speech (POS) Tagging:} We expect POS tags to be highly useful for identifying idioms that follow rigid grammatical patterns, such as the noun-preposition-noun structure.
+    \item \textbf{Syntactic Pattern Matching:} For categories like similes, we explicitly look for comparative markers such as "as" or "like." For oxymorons, we look for the juxtaposition of contradictory adjectives and nouns.
+    \item \textbf{Contextual Tone:} We analyze the overall tone and sentiment of the sentence to help distinguish between literal statements and irony, as irony often involves a sarcastic or contradictory emotional polarity compared to the literal text.
+\end{itemize}
+
+\subsection{Feature Selection and Data Augmentation}
+Due to the extreme class imbalance, where metaphors represent over 72\% of the dataset - we decided to focus on feature selection that highlights devices like paradoxes and ironies, which make up less of the data. Rather than removing data, we utilize the entire dataset to ensure the models are exposed to as many minority-class examples as possible. We also consider feature augmentation by providing the model with binary flags for the presence of specific keywords known to trigger figurative labels, assisting the model in learning patterns associated with low-frequency classes.
 \section{Implementation}
 
 Describe your model and implementation here. Refer to item 4. This may take around a page.
-BECCA
+TIM/LEO
 \section{Results and Evaluation}
 
 What are your results? What did you implement and what did your classmates implement? What are your baselines? Refer to items 5 and 6. This may take around 0.5-1 pages.
@@ -124,11 +185,13 @@ TIM
 Summarize your work briefly. Reflect on your implementation and areas for improvement. What do you suggest people work on next (mentioned also in item 7)? This should likely be less than 0.25 pages.
 BECCA
 
-\section*{Team Contributions}
-
-Write in this section a few sentences describing the contributions of each team member. What did each member work on?
-
-\bibliography{final_report/custom}
-
+\section{Team Contributions} The members of Team 10 each took on specialized roles to ensure the successful execution of both the technical code and documentation aspects of the project.
+\begin{itemize}
+  \item \textbf{Rebecca Di Filippo}: Created repository and main task was helping create the final report. Also assisted choosing coding methods for models.
+  \item \textbf{Claire Nielsen}:  Led the documentation efforts, including writing the final report and ensuring that all sections were cohesive and well-structured. 
+  \item \textbf{Tim Pokanai}: Implemented 2 of the 4 models, and helped right the implementation and error analysis section.
+  \item \textbf{Leo Vugert}: Implemented 2 of the 4 models, and helped right the implementation and error analysis section.
+  \end{itemize}
+%\bibliography{final_report/custom}
 
 \end{document}
