@@ -256,22 +256,39 @@ ModernBERT & \textbf{0.98} & \textbf{0.97} \\ \bottomrule
 \section{Evaluation}
 
 \subsection{Evaluation Strategy}
-Our evaluation strategy is designed to assess the model's ability to generalize across a highly imbalanced multi-class dataset. We utilize a stratified sampling approach for our data splits to ensure that the minority classes, such as Irony and Oxymoron, are represented in the validation and test sets in proportions consistent with the overall corpus. The primary goal is to outperform a simple majority-vote baseline, which would achieve high accuracy by simply predicting "Metaphor" for every instance.
+Our evaluation strategy is designed 
+to assess the model's ability to
+ generalize across a highly imbalanced multi-class dataset. 
+ We utilize a stratified sampling approach for our 
+ data splits to ensure that the minority classes, 
+ such as Irony and Oxymoron, are represented in the 
+ validation and test sets in proportions consistent 
+ with the overall corpus. The primary goal is to 
+ outperform a simple majority-vote baseline,
+  which would achieve high accuracy by simply predicting
+   "Metaphor" for every instance.
 
 \subsection{Train, Validation, and Test Splits}
-The dataset, consisting of 20,174 samples, was divided into training, validation, and test sets using an 80/10/10 split. The sizes of these splits are as follows:
+The dataset, consisting of 20,174 samples, was
+ divided into training, validation, and test sets using
+  a 60/20/20 split. The sizes of these splits are as follows:
+
 \begin{itemize}
-\item \textbf{Training Set:} 16,139 samples (80\%) used for model parameter optimization and feature learning.
-\item \textbf{Validation Set:} 2,017 samples (10\%) used for hyperparameter tuning and preventing overfitting.
-\item \textbf{Test Set:} 2,018 samples (10\%) held out for the final evaluation of model performance.
+\item \textbf{Training Set:} 12,104 samples (60\%) used for model parameter optimization and feature learning.
+\item \textbf{Validation Set:} 4,035 samples (20\%) used for hyperparameter tuning and preventing overfitting.
+\item \textbf{Test Set:} 4,035 samples (20\%) held out for the final evaluation of model performance.
 \end{itemize}
-The label distribution remains consistent across these splits, with Metaphors accounting for roughly 72.7% and the minority classes (Irony, Oxymoron, Hyperbole) collectively making up less than 1%.
+The label distribution remains consistent 
+across these splits, with Metaphors accounting 
+for roughly 72.7\% and 
+the minority classes (Irony, Oxymoron, Hyperbole)
+ collectively making up less than 1\%.
 
 \subsection{Evaluation Metrics}
 Due to the extreme class imbalance identified during our initial analysis, accuracy alone is an insufficient metric for this task. Instead, we prioritize the following metrics:
 \begin{itemize}
-\item \textbf{Macro-Averaged F1-Score:} This is our primary metric, as it treats all ten classes equally, regardless of their frequency. This ensures that the model is penalized heavily if it fails to correctly identify the minority literary devices like Paradox or Irony.
-\item \textbf{Weighted F1-Score:} We use this to understand the model’s overall performance while accounting for the high prevalence of metaphors in real-world English text.
+\item \textbf{Macro F1-Score:} This is our primary metric, as it treats all ten classes equally, regardless of their frequency. This ensures that the model is penalized heavily if it fails to correctly identify the minority literary devices like Paradox or Irony. This is what we used to evaluate and tune. We also reported this.
+\item \textbf{Accuracy:} While not the main focus, we evaluate and fine tune with. This helps with accuracy to provide a baseline comparison against the majority class classifier. However, we interpret this metric with caution due to the dataset's skewed distribution.
 \item \textbf{Precision and Recall per Class:} We generate a classification report to examine specific errors, such as the model’s ability to distinguish between metaphors and similes or metaphors and literal statements.
 \item \textbf{Confusion Matrix:} This qualitative tool is used to visualize which classes are most frequently confused, providing insight into the semantic overlap between similar figurative devices.
 \end{itemize}
@@ -328,19 +345,29 @@ ModernBERT excelled across all classes, with high accuracy even on minority labe
 
 To address these issues, future work could incorporate data augmentation techniques, such as generating synthetic examples for minority classes, or loss functions like focal loss to emphasize hard-to-classify instances. We recommend prioritizing modern transformer models like ModernBERT for similar tasks, while ensuring diverse training data to capture cultural and linguistic variations.
 
-\section*{Conclusions}
+\section{Conclusions}
 
-Summarize your work briefly. Reflect on your implementation and areas for improvement. What do you suggest people work on next (mentioned also in item 7)? This should likely be less than 0.25 pages.
-BECCA
+In this project, we successfully developed a suite of NLP models to classify ten distinct types of idiomatic expressions and literary devices. Our work demonstrated the significant evolution of transformer architectures, as we moved from a standard BERT baseline (0.63 Macro F1) to a ModernBERT implementation that achieved a near-perfect 0.97 Macro F1. 
 
-\section{Team Contributions} The members of Team 10 each took on specialized roles to ensure the successful execution of both the technical code and documentation aspects of the project.
+Reflecting on our implementation, the primary challenge remained the extreme class imbalance and the inherent subjectivity of the task. Our manual annotation phase revealed that even human experts occasionally struggle to distinguish between metaphors and literal statements in "edge case" contexts. While our best models largely overcame the statistical imbalance, they are still susceptible to regional linguistic variations, such as the British specific idioms found.
+
+For future work, we suggest exploring data augmentation techniques specifically designed for minority figurative devices. Using Large Language Models (LLMs) to generate synthetic examples of rare classes like Irony and Paradox could provide a more balanced training signal. Additionally, investigating cross- ultural robustness, specifically testing models on North American versus British idiomatic datasets, would be a valuable next step in creating more globally applicable figurative language classifiers.
+
+
+\section{Team Contributions}
+
+The members of Team 10 each took 
+on roles to ensure 
+the successful
+ execution of the project.
+
 \begin{itemize}
-  \item \textbf{Rebecca Di Filippo}: Created repository and main task was helping create the final report. Also assisted choosing coding methods for models.
-  \item \textbf{Claire Nielsen}:  Led the documentation efforts, including writing the final report and ensuring that all sections were cohesive and well-structured. 
-  \item \textbf{Tim Pokanai}: Implemented 2 of the 4 models, and helped right the implementation and error analysis section.
-  \item \textbf{Leo Vugert}: Implemented 2 of the 4 models, and helped right the implementation and error analysis section.
-  \end{itemize}
-%\bibliography{final_report/custom}
+\item \textbf{Rebecca Di Filippo}: Responsible for the implementation of the \textbf{DeBERTa} model. Primary documentation contributions included authoring the \textbf{Dataset}, \textbf{Features}, and \textbf{Evaluation} sections. She also managed the initial repository setup and assisted in selecting the specific coding methodologies for the transformer models.
+\item \textbf{Claire Nielsen}: Responsible for the implementation of the \textbf{RoBERTa} model. She led the high-level documentation efforts, specifically writing the \textbf{Introduction}, \textbf{Conclusions}, and the \textbf{Comparison to Others} sections, ensuring that the report maintained a cohesive and professional narrative. She also contributed to the \textbf{Related Work} section by researching and summarizing relevant literature on idiomatic expression classification and transformer models.
+\item \textbf{Leo Vugert}: Responsible for the implementation of the \textbf{ModernBERT} model. On the reporting side, he focused on the technical results, co-authoring the \textbf{Implementation} and \textbf{Error Analysis} sections to provide a detailed breakdown of model performance and systematic failures.
+\item \textbf{Tim Pokanai}: Responsible for the implementation of the \textbf{BERT} baseline model. He collaborated on writing the \textbf{Implementation} and \textbf{Error Analysis} sections and served as the final editor for the project, performing a compr.ehensive proofread of the entire document
+\end{itemize}
+\bibliography{final_report/custom}
 
 \appendix
 
