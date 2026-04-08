@@ -296,8 +296,15 @@ Kenneth ran a bert-base-uncased model that produced an accuracy of 0.86 and F1 s
 
 \section{Error Analysis}
 
-What kind of errors are your models making? This doesn't have to be super complicated. Confusion matrices are great. Qualitative observations are also great. This means looking at many cases where your model is wrong (wrong class or high error) and looking for patterns yourself. What about the text might be giving it difficulty? Qualitative analysis is underappreciated and can often give you great insight into issues with your model. Examples are useful here. Refer to item 7. This may be around a half page.
-TIM/LEO
+To systematically examine the errors made by our models, we analyzed the confusion matrices generated for each transformer model (ModernBERT, DeBERTa, RoBERTa, and BERT Base Uncased). These matrices, detailed in the appendix, provide a quantitative view of misclassifications across the ten figurative language classes.
+
+Common error patterns observed include frequent confusion between Metaphor and Literal expressions, as well as between Metaphor and Euphemism. For instance, in the ModernBERT model, out of 2901 correct Metaphor predictions, 19 were misclassified as Euphemism and 10 as Literal. This suggests semantic overlap where the boundary between figurative and literal meanings is ambiguous. Minority classes like Irony and Hyperbole showed higher error rates; for example, the BERT Base Uncased model correctly predicted 0 instances of Hyperbole, often defaulting to Metaphor.
+
+Qualitatively, models struggled with sentences exhibiting subtle contextual cues. For example, the phrase "the worry at the back of her mind" was sometimes misclassified as Literal instead of Metaphor due to its metaphorical nature being context-dependent. Similarly, British idioms like "not by a long chalk" posed challenges for models not exposed to regional variations.
+
+ModernBERT excelled across all classes, with high accuracy even on minority labels (e.g., 6 correct Irony predictions), demonstrating its robustness to class imbalance. In contrast, older models like BERT Base Uncased performed poorly on rare classes, highlighting the benefits of advanced architectures and larger pre-training corpora.
+
+To address these issues, future work could incorporate data augmentation techniques, such as generating synthetic examples for minority classes, or loss functions like focal loss to emphasize hard-to-classify instances. We recommend prioritizing modern transformer models like ModernBERT for similar tasks, while ensuring diverse training data to capture cultural and linguistic variations.
 
 \section*{Conclusions}
 
@@ -312,5 +319,33 @@ BECCA
   \item \textbf{Leo Vugert}: Implemented 2 of the 4 models, and helped right the implementation and error analysis section.
   \end{itemize}
 %\bibliography{final_report/custom}
+
+\appendix
+
+\section{Confusion Matrices}
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\textwidth]{../confusion_matrices/Becca/confusion_matrix.png}
+\caption{Confusion Matrix for Becca's Model}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\textwidth]{../confusion_matrices/Claire/confusion_matrix.png}
+\caption{Confusion Matrix for Claire's Model}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\textwidth]{../confusion_matrices/Leo/confusion_matrix.png}
+\caption{Confusion Matrix for Leo's Model}
+\end{figure*}
+
+\begin{figure*}[p]
+\centering
+\includegraphics[width=\textwidth]{../confusion_matrices/Tim/confusion_matrix.png}
+\caption{Confusion Matrix for Tim's Model}
+\end{figure*}
 
 \end{document}
