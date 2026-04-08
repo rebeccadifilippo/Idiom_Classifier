@@ -190,19 +190,19 @@ The PIE-English Corpus presents a significant challenge
    categories in the corpus.
 \section{Implementation}
 
-The simple baseline for our model was a majority class classifier. In the implementation, a class was initialized with the \texttt{most\_frequent} strategy on sklearn's \texttt{DummyClassifier}. The data is loaded into training dataframes and testing dataframes. The training data is split into the sentences and labels, which is then loaded into the classifier. The test dataframe is then loaded into the predict function and then exported to a CSV. The most frequent label in our dataset is Metaphor.
+The simple baseline for our model was a majority class classifier. In the implementation, a class was initialized with the \texttt{most\_frequent} strategy on sklearn's \texttt{DummyClassifier}. The data is loaded into training dataframes and testing dataframes. The training data is split into the sentences and labels, which is then loaded into the classifier. The test dataframe is then loaded into the predict function and then exported to a CSV. The most frequent label in our dataset is Metaphor. \\
 
-Our simple trained model baseline used TF-IDF to vectorize the tokens, then trained a logistic regression model. The data was built very similarly to the simple baseline in terms of importing data, fitting the model, predicting, and exporting. However, to simplify the code, a pipeline was built that took in the data, vectorized it with TF-IDF, and then trained the logistic regression model as well at once.
+Our simple trained model baseline used TF-IDF to vectorize the tokens, then trained a logistic regression model. The data was built very similarly to the simple baseline in terms of importing data, fitting the model, predicting, and exporting. However, to simplify the code, a pipeline was built that took in the data, vectorized it with TF-IDF, and then trained the logistic regression model as well at once. \\
 	
-  The next model that was fine-tuned was the ModernBert Base model. Training, validation, and test CSVs were loaded into Pandas data frames, the labels were then encoded, and the data frames were passed into HuggingFace datasets. The model, tokenizer, and compute metrics were then initialized, parameters were passed through the training arguments, the trainer is initialized, and once the training was done, the model predicts and exports a CSV. Training was done on Google Colab using Nvidia T4 GPUs, after many hyperparameter tunings the learning rate was set to 5e-5, train batch to 16, evaluation batch to 32, 6 epochs, warm up ration of 01, weight decay to 0.01, and the best model was set to be loaded at the end. The model was then retrained with 8 epochs and included the validation data as training data and this produced our best results.
+  The next model that was fine-tuned was the ModernBert Base model. Training, validation, and test CSVs were loaded into Pandas data frames, the labels were then encoded, and the data frames were passed into HuggingFace datasets. The model, tokenizer, and compute metrics were then initialized, parameters were passed through the training arguments, the trainer is initialized, and once the training was done, the model predicts and exports a CSV. Training was done on Google Colab using Nvidia T4 GPUs, after many hyperparameter tunings the learning rate was set to 5e-5, train batch to 16, evaluation batch to 32, 6 epochs, warm up ration of 01, weight decay to 0.01, and the best model was set to be loaded at the end. The model was then retrained with 8 epochs and included the validation data as training data and this produced our best results. \\
 	
-  The following models were built similarly, just without the retraining with the validation data at the end. All the models we used were BERT models because they get a better understanding of the context of sentences.
+  The following models were built similarly, just without the retraining with the validation data at the end. All the models we used were BERT models because they get a better understanding of the context of sentences. \\
 	
-  The second model we trained was a Bert Base Uncased model. The training arguments were learning rate as 2e-5, train batch size is 16, evaluation batch size is 16, 3 epochs, 0.01 weight decay, and the best model was loaded at the end.
+  The second model we trained was a Bert Base Uncased model. The training arguments were learning rate as 2e-5, train batch size is 16, evaluation batch size is 16, 3 epochs, 0.01 weight decay, and the best model was loaded at the end. \\
 	
-  The third model was a RoBERTa model with a learning rate of 1.5e-5, train batch size is 16, evaluation batch size is 32, 6 epochs, 0.01 weight decay, 0.1 warmup ratio, and the best model was loaded at the end. Fp16 was enabled to speed up training time and reduce memory usage.
+  The third model was a RoBERTa model with a learning rate of 1.5e-5, train batch size is 16, evaluation batch size is 32, 6 epochs, 0.01 weight decay, 0.1 warmup ratio, and the best model was loaded at the end. Fp16 was enabled to speed up training time and reduce memory usage. \\
 	
-  The fourth model was DeBERTa, though it produced poor results at the beginning, after fine-tuning the parameters, the results improved exponentially. The learning rate was set to 1.5e-5, train batch was 16, evaluation batch was 32, 6 epochs, warm up ratio set to 0.1, weight decay was 0.01, the best model was loaded at the end, and bf16 and fp16 were enabled for faster and more efficient training.
+  The fourth model was DeBERTa, though it produced poor results at the beginning, after fine-tuning the parameters, the results improved exponentially. The learning rate was set to 1.5e-5, train batch was 16, evaluation batch was 32, 6 epochs, warm up ratio set to 0.1, weight decay was 0.01, the best model was loaded at the end, and bf16 and fp16 were enabled for faster and more efficient training. \\
 
 
 \begin{table}[htbp]
@@ -223,18 +223,50 @@ DeBERTa & 1.5e-5 & 16 & 32 & 6 & 0.01 & 0.1 \\ \bottomrule
 \end{table}
 \section{Results}
 
-The simple baseline model received an accuracy score of 0.73, but a Macro F1 score of 0.08. Since the simple baseline model is majority class classifier, it accurately predicts 73% of the test data, however, because it only accurately predicts the Metaphor class, the precision, recall, and F1 of all other classes is 0, so when the Macro F1 is taken by averaging them all, it becomes very small as the only one with weight is the one out of ten classes.
+The simple baseline model received an accuracy score of 0.73, but a Macro F1
+ score of 0.08. Since the simple baseline model is majority class classifier, 
+ it accurately predicts 73\% of the test data, however, because it only accurately 
+ predicts the Metaphor class, the precision, recall, and F1 of all other classes is 0, 
+ so when the Macro F1 is taken by averaging them all, it becomes very small as the only 
+ one with weight is the one out of ten classes. \\
 
-The logistic regression model had an accuracy of 0.87 and a Macro F1 score of 0.9. This one was much higher because the F1 score of classes other than metaphors were way higher than in the simple baseline model (where they were 0). By treating the text as a sparse "bag of words" using TF-IDF, the model successfully exploited specific vocabulary artifacts and trigger words unique to the minority classes. This simpler linear approach effectively isolated lexical cues without being overwhelmed by broader sentence context.
+The logistic regression model had an accuracy of 0.87 and a Macro F1 score of 0.9. 
+This one was much higher because the F1 score of classes other than metaphors were way 
+higher than in the simple baseline model (where they were 0). By treating the text as a 
+sparse "bag of words" using TF-IDF, the model successfully exploited specific vocabulary
+ artifacts and trigger words unique to the minority classes. This simpler linear 
+ approach effectively isolated lexical cues without being overwhelmed by broader
+  sentence context. \\
 
-The BERT Base Uncased model achieved an accuracy of 0.95 and a Macro F1 score of 0.63. As a 110-million parameter model originally pre-trained over four days on 16 TPUs using the BooksCorpus and English Wikipedia (roughly 16GB of text), it is the oldest architecture in our deep learning lineup. While the 0.95 accuracy appears strong on the surface, the 0.63 Macro F1 reveals that it still partially fell victim to majority class bias. Its standard self-attention mechanism lacked the semantic depth required to confidently differentiate the highly ambiguous minority classes, frequently defaulting to the dominant "Metaphor" label when it encountered complex or unfamiliar sentence structures.
+The BERT Base Uncased model got an accuracy of 0.95 and a Macro F1 score of 0.63. 
+Bert has 110-million parameters and was pre-trained on BooksCorpus and English 
+Wikipedia over four days on 16 TPUs. It's the oldest model we used in our models. It has 0.95 
+accuracy, but the 0.63 Macro F1 shows it was still affected
+ by the majority class bias. Its self-attention didn't have enough depth 
+ to handle the minority classes, so it often just picked "Metaphor" for anything
+  complicated. \\
 
-The RoBERTa model showed significant improvement, achieving an accuracy of 0.97 and a Macro F1 score of 0.88. RoBERTa is a 125-million parameter architecture that was pre-trained on a much larger 160GB corpus (including CC-News and OpenWebText) using 1024 V100 GPUs. By removing BERT's next-sentence prediction objective and utilizing dynamic masking during its massive pre-training phase, RoBERTa captured much richer and more robust semantic representations. This broader world knowledge allowed it to understand the underlying context of minority classes like Irony and Paradox much better than base BERT, raising its Macro F1 substantially.
+The RoBERTa model did better, with an accuracy of 0.97 and a Macro F1 score of 0.88. 
+The model has 125-million parameter and was pre-trained on a 160GB corpus (CC-News and OpenWebText)
+, using 1024 V100 GPUs. It doesn't use next-sentence 
+prediction like BERT Base and used dynamic masking instead, which gives it a better understanding of semantics.
+ That helped it understand minority classes like Irony and Paradox way better than base 
+ BERT, boosting its Macro F1. \\
 
-The DeBERTa model achieved an accuracy of 0.96 and a highly impressive Macro F1 score of 0.94. This roughly 140-million parameter model was pre-trained on 78GB of data using 64 V100 GPUs, but its true advantage lies in its architecture. DeBERTa utilizes a unique "disentangled attention" mechanism that computes a word's content and its relative position in a sentence separately. This gave the model a massive structural advantage in parsing complex figurative language. By explicitly understanding how words relate to each other spatially, DeBERTa excelled at identifying highly structural literary devices such as Similes and Parallelism which allows it to easily outperform the logistic regression baseline.
+The DeBERTa model has an accuracy of 0.96 and a Macro F1 score of 0.94.
+ It has 140-million parameters and was pre-trained on 78GB of data with 64 V100 GPUs.
+  It uses a disentangled attention mechanism that handles word 
+  content and position separately. This helps it parse complex 
+  figurative language, making it better at spotting structural stuff like Similes 
+  and Parallelism. \\
 
-Finally, ModernBERT was our best-performing model, achieving a near-perfect accuracy of 0.98 and a Macro F1 of 0.97. ModernBERT is a 149-million parameter model pre-trained on an unprecedented 2 trillion tokens of web data, code, and scientific literature. Benefiting from state-of-the-art architectural upgrades like Rotary Position Embeddings (RoPE) and unpadded Flash Attention, it possesses an incredibly deep semantic understanding. This immense pre-training knowledge, combined with our strategy of retraining the model on the full, combined dataset, allowed ModernBERT to completely overcome the severe class imbalance. It proved that with a modern enough architecture, deep contextual models can extract the subtle, underlying meanings of the rarest figurative language classes without needing to rely on surface-level trigger words.
-
+Finally, ModernBERT was our best classifier, it has an accuracy of 0.98 
+and a Macro F1 of 0.97. It has 149-million parameter model and was pre-trained on 
+2 trillion tokens from web data, code, and scientific literature. It has new features
+ like Rotary Position Embeddings (RoPE) and unpadded Flash Attention for 
+better understanding of the sentences. Combined with retraining on our full dataset (training and validation data), 
+it handled the class imbalance the best, picking up on the subtle meanings of
+ even the rarest figurative classes without needing obvious trigger words. \\
 
 \begin{table}[htbp]
 \centering
@@ -335,15 +367,15 @@ Kenneth ran a bert-base-uncased model that produced an accuracy of 0.86 and F1 s
 
 \section{Error Analysis}
 
-To systematically examine the errors made by our models, we analyzed the confusion matrices generated for each transformer model (ModernBERT, DeBERTa, RoBERTa, and BERT Base Uncased). These matrices, detailed in the appendix, provide a quantitative view of misclassifications across the ten figurative language classes.
+To systematically examine the errors made by our models, we analyzed the confusion matrices generated for each transformer model (ModernBERT, DeBERTa, RoBERTa, and BERT Base Uncased). These matrices, detailed in the appendix, provide a quantitative view of misclassifications across the ten figurative language classes. \\
 
-Common error patterns observed include frequent confusion between Metaphor and Literal expressions, as well as between Metaphor and Euphemism. For instance, in the ModernBERT model, out of 2901 correct Metaphor predictions, 19 were misclassified as Euphemism and 10 as Literal. This suggests semantic overlap where the boundary between figurative and literal meanings is ambiguous. Minority classes like Irony and Hyperbole showed higher error rates; for example, the BERT Base Uncased model correctly predicted 0 instances of Hyperbole, often defaulting to Metaphor.
+Common error patterns observed include frequent confusion between Metaphor and Literal expressions, as well as between Metaphor and Euphemism. For instance, in the ModernBERT model, out of 2901 correct Metaphor predictions, 19 were misclassified as Euphemism and 10 as Literal. This suggests semantic overlap where the boundary between figurative and literal meanings is ambiguous. Minority classes like Irony and Hyperbole showed higher error rates; for example, the BERT Base Uncased model correctly predicted 0 instances of Hyperbole, often defaulting to Metaphor. \\
 
-Qualitatively, models struggled with sentences exhibiting subtle contextual cues. For example, the phrase "the worry at the back of her mind" was sometimes misclassified as Literal instead of Metaphor due to its metaphorical nature being context-dependent. Similarly, British idioms like "not by a long chalk" posed challenges for models not exposed to regional variations.
+Qualitatively, models struggled with sentences exhibiting subtle contextual cues. For example, the phrase "the worry at the back of her mind" was sometimes misclassified as Literal instead of Metaphor due to its metaphorical nature being context-dependent. Similarly, British idioms like "not by a long chalk" posed challenges for models not exposed to regional variations. \\
 
-ModernBERT excelled across all classes, with high accuracy even on minority labels (e.g., 6 correct Irony predictions), demonstrating its robustness to class imbalance. In contrast, older models like BERT Base Uncased performed poorly on rare classes, highlighting the benefits of advanced architectures and larger pre-training corpora.
+ModernBERT excelled across all classes, with high accuracy even on minority labels (e.g., 6 correct Irony predictions), demonstrating its robustness to class imbalance. In contrast, older models like BERT Base Uncased performed poorly on rare classes, highlighting the benefits of advanced architectures and larger pre-training corpora. \\
 
-To address these issues, future work could incorporate data augmentation techniques, such as generating synthetic examples for minority classes, or loss functions like focal loss to emphasize hard-to-classify instances. We recommend prioritizing modern transformer models like ModernBERT for similar tasks, while ensuring diverse training data to capture cultural and linguistic variations.
+To address these issues, future work could incorporate data augmentation techniques, such as generating synthetic examples for minority classes, or loss functions like focal loss to emphasize hard-to-classify instances. We recommend prioritizing modern transformer models like ModernBERT for similar tasks, while ensuring diverse training data to capture cultural and linguistic variations. \\
 
 \section{Conclusions}
 
