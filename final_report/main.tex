@@ -156,16 +156,38 @@ Our team utilizes a combination of learned and
   that prioritizes the semantic relationship between words
    in a figurative context.
 
+
 \subsection{Feature Engineering}
-In addition to automated representation learning, we incorporate manual feature engineering to assist the models in identifying structural cues for low-frequency classes. Key features include:
-\begin{itemize}
-    \item \textbf{Part-of-Speech (POS) Tagging:} We expect POS tags to be highly useful for identifying idioms that follow rigid grammatical patterns, such as the noun-preposition-noun structure.
-    \item \textbf{Syntactic Pattern Matching:} For categories like similes, we explicitly look for comparative markers such as "as" or "like." For oxymorons, we look for the juxtaposition of contradictory adjectives and nouns.
-    \item \textbf{Contextual Tone:} We analyze the overall tone and sentiment of the sentence to help distinguish between literal statements and irony, as irony often involves a sarcastic or contradictory emotional polarity compared to the literal text.
-\end{itemize}
+
+For our final implementation, we shifted away from manual 
+feature engineering to focus on automated representation 
+learning. Rather than defining specific linguistic 
+markers, we utilize contextualized word embeddings from a
+ fine-tuned transformer model (DistilBERT) to 
+ capture the complex semantic relationships
+  inherent in idiomatic language. This approach allows
+   the neural network to internally learn the necessary
+    features to distinguish between literal and figurative
+     meanings without the need for manually defined rules. This
+      is particularly critical for our task because
+       the intended meaning of an idiom often cannot 
+       be derived from the literal definitions of
+        individual tokens.
 
 \subsection{Feature Selection and Data Augmentation}
-Due to the extreme class imbalance, where metaphors represent over 72\% of the dataset - we decided to focus on feature selection that highlights devices like paradoxes and ironies, which make up less of the data. Rather than removing data, we utilize the entire dataset to ensure the models are exposed to as many minority-class examples as possible. We also consider feature augmentation by providing the model with binary flags for the presence of specific keywords known to trigger figurative labels, assisting the model in learning patterns associated with low-frequency classes.
+The PIE-English Corpus presents a significant challenge
+ due to its extreme class imbalance, with metaphors 
+ representing approximately 72.7\% of the total samples. After
+  evaluating our approach, we decided against performing 
+  specific feature selection or data augmentation. 
+  Instead, we utilized the entire dataset of 20,174 samples
+   for training and evaluation to ensure the models were
+    exposed to the maximum possible number of instances for 
+  minority labels, such as paradoxes and ironies. 
+  This decision ensures that our models learn from 
+  the natural distribution of the data while
+   maintaining exposure to the rarest but arguabally more relevant
+   categories in the corpus.
 \section{Implementation}
 
 The simple baseline for our model was a majority class classifier. In the implementation, a class was initialized with the \texttt{most\_frequent} strategy on sklearn's \texttt{DummyClassifier}. The data is loaded into training dataframes and testing dataframes. The training data is split into the sentences and labels, which is then loaded into the classifier. The test dataframe is then loaded into the predict function and then exported to a CSV. The most frequent label in our dataset is Metaphor.
