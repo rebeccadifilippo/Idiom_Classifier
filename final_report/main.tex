@@ -143,7 +143,7 @@ During the annotation process, we identified several interesting linguistic nuan
 \section{Features}
 
 \subsection{Model Inputs and Representation}
-The primary input for our models consists of reconstructed English sentences derived from the token-per-row CSV format of the PIE-English Corpus. During the preprocessing phase, these tokens are joined to form complete grammatical units, ensuring the models have access to the full sentential context necessary for disambiguating figurative language. To reduce the complexity of the input space and handle vocabulary sparsity, all text is normalized to lowercase before being fed into the embedding layers.
+The primary input for our models consists of reconstructed English sentences derived from the token-per-row CSV format of the PIE-English Corpus. During the preprocessing phase, these tokens are joined to form complete grammatical units, ensuring the models have access to the full context necessary for discerning figurative language. To reduce the complexity of the input space and handle vocabulary sparsity, all text is normalized to lowercase before being fed into the embedding layers.
 
 \subsection{Representation Learning and Embeddings}
 Our team utilizes a combination of learned and
@@ -186,7 +186,7 @@ The PIE-English Corpus presents a significant challenge
   minority labels, such as paradoxes and ironies. 
   This decision ensures that our models learn from 
   the natural distribution of the data while
-   maintaining exposure to the rarest but arguabally more relevant
+   maintaining exposure to the rarest but arguably more relevant
    categories in the corpus.
 \section{Implementation}
 
@@ -194,7 +194,7 @@ The simple baseline for our model was a majority class classifier. In the implem
 
 Our simple trained model baseline used TF-IDF to vectorize the tokens, then trained a logistic regression model. The data was built very similarly to the simple baseline in terms of importing data, fitting the model, predicting, and exporting. However, to simplify the code, a pipeline was built that took in the data, vectorized it with TF-IDF, and then trained the logistic regression model as well at once. \\
 	
-  The next model that was fine-tuned was the ModernBert Base model. Training, validation, and test CSVs were loaded into Pandas data frames, the labels were then encoded, and the data frames were passed into HuggingFace datasets. The model, tokenizer, and compute metrics were then initialized, parameters were passed through the training arguments, the trainer is initialized, and once the training was done, the model predicts and exports a CSV. Training was done on Google Colab using Nvidia T4 GPUs, after many hyperparameter tunings the learning rate was set to 5e-5, train batch to 16, evaluation batch to 32, 6 epochs, warm up ration of 01, weight decay to 0.01, and the best model was set to be loaded at the end. The model was then retrained with 8 epochs and included the validation data as training data and this produced our best results. \\
+  The next model that was fine-tuned was the ModernBert Base model. Training, validation, and test CSVs were loaded into Pandas data frames, the labels were then encoded, and the data frames were passed into HuggingFace datasets. The model, tokenizer, and compute metrics were then initialized, parameters were passed through the training arguments, the trainer is initialized, and once the training was done, the model predicts and exports a CSV. Training was done on Google Colab using Nvidia T4 GPUs, after many hyperparameter tunings the learning rate was set to 5e-5, train batch to 16, evaluation batch to 32, 6 epochs, warm up ratio of 01, weight decay to 0.01, and the best model was set to be loaded at the end. The model was then retrained with 8 epochs and included the validation data as training data and this produced our best results. \\
 	
   The following models were built similarly, just without the retraining with the validation data at the end. All the models we used were BERT models because they get a better understanding of the context of sentences. \\
 	
@@ -381,9 +381,9 @@ To address these issues, future work could incorporate data augmentation techniq
 
 In this project, we successfully developed a suite of NLP models to classify ten distinct types of idiomatic expressions and literary devices. Our work demonstrated the significant evolution of transformer architectures, as we moved from a standard BERT baseline (0.63 Macro F1) to a ModernBERT implementation that achieved a near-perfect 0.97 Macro F1. 
 
-Reflecting on our implementation, the primary challenge remained the extreme class imbalance and the inherent subjectivity of the task. Our manual annotation phase revealed that even human experts occasionally struggle to distinguish between metaphors and literal statements in "edge case" contexts. While our best models largely overcame the statistical imbalance, they are still susceptible to regional linguistic variations, such as the British specific idioms found.
+Reflecting on our implementation, the primary challenge remained the extreme class imbalance and the subjectivity of the task. Our manual annotation phase revealed that even human experts occasionally struggle to distinguish between metaphors and literal statements in "edge case" contexts. While our best models largely overcame the statistical imbalance, they are still susceptible to regional linguistic variations, such as the British specific idioms found.
 
-For future work, we suggest exploring data augmentation techniques specifically designed for minority figurative devices. Using Large Language Models (LLMs) to generate synthetic examples of rare classes like Irony and Paradox could provide a more balanced training signal. Additionally, investigating cross- ultural robustness, specifically testing models on North American versus British idiomatic datasets, would be a valuable next step in creating more globally applicable figurative language classifiers.
+For future work, we suggest exploring data augmentation techniques specifically designed for minority figurative devices. Using Large Language Models (LLMs) to generate synthetic examples of rare classes like Irony and Paradox could provide a more balanced training signal. Additionally, investigating cross-cultural robustness, specifically testing models on North American versus British idiomatic datasets, would be a valuable next step in creating more globally applicable figurative language classifiers.
 
 
 \section{Team Contributions}
